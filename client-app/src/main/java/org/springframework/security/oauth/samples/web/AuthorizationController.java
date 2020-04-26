@@ -38,20 +38,22 @@ public class AuthorizationController {
 	private WebClient webClient;
 
 
-	@GetMapping(value = "/authorize", params = "grant_type=authorization_code")
-	public String authorization_code_grant(Model model) {
-		String[] messages = retrieveMessages("messaging-client-auth-code");
-		model.addAttribute("messages", messages);
-		return "index";
-	}
+	// authentication: user/password via Keycloak login
+//	@GetMapping(value = "/authorize", params = "grant_type=authorization_code")
+//	public String authorization_code_grant(Model model) {
+//		String[] messages = retrieveMessages("messaging-client-auth-code");
+//		model.addAttribute("messages", messages);
+//		return "index";
+//	}
 
-	@GetMapping("/authorized")		// registered redirect_uri for authorization_code
-	public String authorized(Model model) {
-		String[] messages = retrieveMessages("messaging-client-auth-code");
-		model.addAttribute("messages", messages);
-		return "index";
-	}
+//	@GetMapping("/authorized")		// registered redirect_uri for authorization_code (see keycloak>clients>your client>Settings>* Calid Redirect URIs)
+//	public String authorized(Model model) {
+//		String[] messages = retrieveMessages("messaging-client-auth-code");
+//		model.addAttribute("messages", messages);
+//		return "index";
+//	}
 
+	// authentication: client-id and client-secret
 	@GetMapping(value = "/authorize", params = "grant_type=client_credentials")
 	public String client_credentials_grant(Model model) {
 		String[] messages = retrieveMessages("messaging-client-client-creds");
@@ -59,14 +61,15 @@ public class AuthorizationController {
 		return "index";
 	}
 
-	@PostMapping(value = "/authorize", params = "grant_type=password")
-	public String password_grant(Model model) {
-		String[] messages = retrieveMessages("messaging-client-password");
-		model.addAttribute("messages", messages);
-		return "index";
-	}
+	// authentication: user/password via form login
+//	@PostMapping(value = "/authorize", params = "grant_type=password")
+//	public String password_grant(Model model) {
+//		String[] messages = retrieveMessages("messaging-client-password");
+//		model.addAttribute("messages", messages);
+//		return "index";
+//	}
 
-	private String[] retrieveMessages(String clientRegistrationId) {
+	private String[] retrieveMessages(String clientRegistrationId) { // ex. messaging-client-client-creds
 		return this.webClient
 				.get()
 				.uri(this.messagesBaseUri)

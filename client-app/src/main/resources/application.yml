@@ -16,29 +16,29 @@ spring:
     oauth2:
       client:
         registration:
-          messaging-client-auth-code:
-            provider: keycloak
-            client-id: messaging-client
-            client-secret: secret
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/authorized"
-            scope: message.read,message.write
-          messaging-client-client-creds:
+#          messaging-client-auth-code: # user/password via keycloak login form
+#            provider: keycloak
+#            client-id: messaging-client
+#            client-secret: secret
+#            authorization-grant-type: authorization_code
+#            redirect-uri: "{baseUrl}/authorized"
+#            scope: message.read,message.write
+          messaging-client-client-creds: # no user/pass required
             provider: keycloak
             client-id: messaging-client
             client-secret: secret
             authorization-grant-type: client_credentials
             scope: message.read,message.write
-          messaging-client-password:
-            provider: keycloak
-            client-id: messaging-client
-            client-secret: secret
-            authorization-grant-type: password
-            scope: message.read,message.write
+#          messaging-client-password: # user/password via login form
+#            provider: keycloak
+#            client-id: messaging-client
+#            client-secret: secret
+#            authorization-grant-type: password
+#            scope: message.read,message.write
         provider:
           keycloak:
             authorization-uri: http://auth-server:8090/auth/realms/oauth2-sample/protocol/openid-connect/auth
             token-uri: http://auth-server:8090/auth/realms/oauth2-sample/protocol/openid-connect/token
 
-messages:
+messages: # resource-server address
   base-uri: http://localhost:8092/messages

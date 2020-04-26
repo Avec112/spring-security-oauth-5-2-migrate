@@ -15,6 +15,7 @@
  */
 package org.springframework.security.oauth.samples.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.OAuth2AuthorizationContext;
@@ -39,6 +40,7 @@ import java.util.function.Function;
 /**
  * @author Joe Grandja
  */
+@Slf4j
 @Configuration
 public class WebClientConfig {
 
@@ -56,10 +58,10 @@ public class WebClientConfig {
 															OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		OAuth2AuthorizedClientProvider authorizedClientProvider =
 				OAuth2AuthorizedClientProviderBuilder.builder()
-						.authorizationCode()
+//						.authorizationCode() // username/password via Keycloak login (grant_type=authorization_code)
+						.clientCredentials() // (grant_type=client_credentials)
+//						.password() // username/password via form login (grant_type=password)
 						.refreshToken()
-						.clientCredentials()
-						.password()
 						.build();
 		DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
 				clientRegistrationRepository, authorizedClientRepository);
@@ -67,25 +69,28 @@ public class WebClientConfig {
 
 		// For the `password` grant, the `username` and `password` are supplied via request parameters,
 		// so map it to `OAuth2AuthorizationContext.getAttributes()`.
-		authorizedClientManager.setContextAttributesMapper(contextAttributesMapper());
+//		authorizedClientManager.setContextAttributesMapper(contextAttributesMapper()); // form login
 
 		return authorizedClientManager;
 	}
 
-	private Function<OAuth2AuthorizeRequest, Map<String, Object>> contextAttributesMapper() {
-		return authorizeRequest -> {
-			Map<String, Object> contextAttributes = Collections.emptyMap();
-			HttpServletRequest servletRequest = authorizeRequest.getAttribute(HttpServletRequest.class.getName());
-			String username = servletRequest.getParameter(OAuth2ParameterNames.USERNAME);
-			String password = servletRequest.getParameter(OAuth2ParameterNames.PASSWORD);
-			if (StringUtils.hasText(username) && StringUtils.hasText(password)) {
-				contextAttributes = new HashMap<>();
-
-				// `PasswordOAuth2AuthorizedClientProvider` requires both attributes
-				contextAttributes.put(OAuth2AuthorizationContext.USERNAME_ATTRIBUTE_NAME, username);
-				contextAttributes.put(OAuth2AuthorizationContext.PASSWORD_ATTRIBUTE_NAME, password);
-			}
-			return contextAttributes;
-		};
-	}
+	/*
+	 * Via form login aka password grant
+	 */
+//	private Function<OAuth2AuthorizeRequest, Map<String, Object>> contextAttributesMapper() {
+//		return authorizeRequest -> {
+//			Map<String, Object> contextAttributes = Collections.emptyMap();
+//			HttpServletRequest servletRequest = authorizeRequest.getAttribute(HttpServletRequest.class.getName());
+//			String username = servletRequest.getParameter(OAuth2ParameterNames.USERNAME);
+//			String password = servletRequest.getParameter(OAuth2ParameterNames.PASSWORD);
+//			if (StringUtils.hasText(username) && StringUtils.hasText(password)) {
+//				contextAttributes = new HashMap<>();
+//
+//				// `PasswordOAuth2AuthorizedClientProvider` requires both attributes
+//				contextAttributes.put(OAuth2AuthorizationContext.USERNAME_ATTRIBUTE_NAME, username);
+//				contextAttributes.put(OAuth2AuthorizationContext.PASSWORD_ATTRIBUTE_NAME, password);
+//			}
+//			return contextAttributes;
+//		};
+//	}
 }

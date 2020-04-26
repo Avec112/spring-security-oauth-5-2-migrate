@@ -30,7 +30,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.mvcMatcher("/messages/**")
-			.authorizeRequests()
+			.authorizeRequests() // scope authorization. Will give 403 if scope not specified in Token
 				.mvcMatchers("/messages/**").access("hasAuthority('SCOPE_message.read')")
 				.and()
 			.oauth2ResourceServer()
