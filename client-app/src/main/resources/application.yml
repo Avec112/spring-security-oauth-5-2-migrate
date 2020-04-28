@@ -7,7 +7,9 @@ logging:
     org.springframework.web: INFO
     org.springframework.security: INFO
     org.springframework.security.oauth2: INFO
+    org.springframework.security.oauth: DEBUG # Application source
 #    org.springframework.boot.autoconfigure: DEBUG
+
 
 spring:
   thymeleaf:
@@ -37,7 +39,7 @@ spring:
 #            scope: message.read,message.write
         provider:
           keycloak:
-            authorization-uri: http://auth-server:8090/auth/realms/oauth2-sample/protocol/openid-connect/auth
+#            authorization-uri: http://auth-server:8090/auth/realms/oauth2-sample/protocol/openid-connect/auth
             token-uri: http://auth-server:8090/auth/realms/oauth2-sample/protocol/openid-connect/token
 
 messages: # resource-server address

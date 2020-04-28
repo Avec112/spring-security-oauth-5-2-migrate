@@ -15,12 +15,12 @@
  */
 package org.springframework.security.oauth.samples.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId;
@@ -28,6 +28,7 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 /**
  * @author Joe Grandja
  */
+@Slf4j
 @Controller
 public class AuthorizationController {
 
@@ -70,6 +71,7 @@ public class AuthorizationController {
 //	}
 
 	private String[] retrieveMessages(String clientRegistrationId) { // ex. messaging-client-client-creds
+		log.debug("webclient: {}", webClient);
 		return this.webClient
 				.get()
 				.uri(this.messagesBaseUri)
